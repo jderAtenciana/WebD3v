@@ -286,12 +286,10 @@
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
   <script>
-   
+
     const PORTFOLIO_URL = "https://jderatenciana.github.io/";
 
     const ACTIVITIES = [
-      
-    
       {
         code: "ACT03",
         title: "Coming Soon!",
@@ -302,17 +300,17 @@
       },
       {
         code: "ACT02",
-        title: "Json Website",
+        title: "ADC League of Legends Champions Json Data",
         desc: "A Json Data website.",
-        tags: ["HTML", "CSS", "Bootstrap"],
+        tags: ["HTML", "CSS", "Bootstrap", "JavaScript"],
         link: "ACT02/index.html",
         image: ""
       },
       {
         code: "ACT01",
-        title: "Bento",
+        title: "Fighting Style Bento",
         desc: "My first activity: a bento-style layout built with HTML, CSS and Bootstrap.",
-        tags: ["HTML", "CSS", "Bootstrap"],
+        tags: ["HTML", "CSS", "Bootstrap, JavaScript"],
         link: "ACT01/Bento.html",
         image: ""
       }
@@ -325,16 +323,23 @@
 
     document.querySelectorAll(".portfolio-link").forEach(a => a.href = PORTFOLIO_URL);
     document.querySelectorAll("#nav a[href^='#']").forEach(a => { const h = a.getAttribute("href"); if (h !== "#top") a.href = PORTFOLIO_URL + h; });
-    if (sorted[0]) $("#latest").innerHTML = `<div class="display-1 fw-bold tight lh-1">${esc(num(sorted[0]))}</div><p class="mb-0 mt-2">Latest: <a href="${esc(sorted[0].link)}"><strong>${esc(sorted[0].title)}</strong></a></p>`;
+
+    // Latest = newest activity that actually has a page (skips "Coming Soon" entries)
+    const latest = sorted.find(a => a.link);
+    if (latest) $("#latest").innerHTML = `<div class="display-1 fw-bold tight lh-1">${esc(num(latest))}</div><p class="mb-0 mt-2">Latest: <a href="${esc(latest.link)}"><strong>${esc(latest.title)}</strong></a></p>`;
     if (ACTIVITIES.length > 3) $("#q").hidden = false;
 
     function card(a, wide) {
+      const linked = !!a.link;
+      const open = linked ? `<a href="${esc(a.link)}" aria-label="Open ${esc(a.title)}">` : `<div>`;
+      const close = linked ? `</a>` : `</div>`;
+      const title = linked ? `<a href="${esc(a.link)}">${esc(a.title)}</a>` : esc(a.title);
       const media = a.image
         ? `<img src="${esc(a.image)}" alt="${esc(a.title)}" class="object-fit-cover" loading="lazy">`
         : `<div class="bg-black text-white d-flex align-items-end p-3 fw-bold tight lh-1" style="font-size:clamp(5rem,16vw,11rem)" aria-hidden="true">${esc(num(a))}</div>`;
       return `<div class="${wide ? "col-12" : "col-md-6"}"><article class="project">
-    <a href="${esc(a.link)}" aria-label="Open ${esc(a.title)}"><div class="position-relative"><div class="ratio ${wide ? "ratio-21x9" : "ratio-4x3"}">${media}</div><span class="glass position-absolute top-0 start-0 m-2 px-3 py-1 rounded-pill small fw-medium">${esc(a.code)}</span></div></a>
-    <h3 class="fw-bold tight mt-3 mb-2 ${wide ? "display-6" : "fs-4"}"><a href="${esc(a.link)}">${esc(a.title)}</a></h3>
+    ${open}<div class="position-relative"><div class="ratio ${wide ? "ratio-21x9" : "ratio-4x3"}">${media}</div><span class="glass position-absolute top-0 start-0 m-2 px-3 py-1 rounded-pill small fw-medium">${esc(a.code)}</span></div>${close}
+    <h3 class="fw-bold tight mt-3 mb-2 ${wide ? "display-6" : "fs-4"}">${title}</h3>
     <p class="mb-2">${esc(a.desc)}</p>
     <div>${(a.tags || []).map(t => `<span class="badge rounded-0 border border-secondary bg-transparent text-body fw-bold me-1">${esc(t)}</span>`).join("")}</div>
   </article></div>`;
