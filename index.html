@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
-    /* Only what Bootstrap can't do: theme tokens, glass blur, hover effects, letter warp */
+   
     :root {
       --bs-body-font-family: "Inter Tight", "Helvetica Neue", Helvetica, Arial, sans-serif;
       --bs-body-bg: #fff;
@@ -159,11 +159,8 @@
             <a class="h32 d-flex align-items-center text-white fw-medium" href="#experience">Experience</a>
             <a class="h32 d-flex align-items-center text-white fw-medium" href="#education">Education</a>
             <a class="h32 d-flex align-items-center text-white fw-medium" href="#projects">Projects</a>
-            <div class="nav-item">
-              <a class="h32 d-flex align-items-center text-white fw-medium"
-                href="https://jderatenciana.github.io/WebD3v/index.html" target="_blank" rel="noopener">WEBDEV</a>
-              </div>
-            </div>
+            <a class="h32 d-flex align-items-center text-white fw-medium"
+              href="https://jderatenciana.github.io/WebD3v/index.html" target="_blank" rel="noopener">WEBDEV</a>
           </div>
           <button id="themeBtn" type="button"
             class="btn btn-sm btn-outline-light bg-white bg-opacity-10 rounded-circle p-0 d-flex align-items-center justify-content-center"
@@ -368,7 +365,7 @@
       themeBtn.querySelector(".icon-moon").classList.toggle("d-none", dark);
     });
 
-    /* Letter warp on the title (same effect as the portfolio name) */
+ 
     (function () {
       const h1 = document.querySelector(".name-heading");
       if (!h1 || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
