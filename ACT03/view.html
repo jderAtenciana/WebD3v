@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>LEAGUE CHAMPIONS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        /* League of Legends theme: Bootstrap variable overrides + a few helpers */
+        :root,
+        [data-bs-theme=dark] {
+            --lol-gold: #c8aa6e;
+            --lol-gold-dark: #785a28;
+            --lol-gold-light: #f0e6d2;
+            --lol-hex: #0ac8b9;
+            --team-blue: #2f8bff;
+            --team-red: #e84057;
+            --bs-body-bg: #010a13;
+            --bs-body-color: #a09b8c;
+            --bs-heading-color: #f0e6d2;
+            --bs-border-color: #463714;
+            --bs-link-color: #c8aa6e;
+            --bs-link-hover-color: #f0e6d2;
+            --bs-secondary-color: #a09b8c;
+        }
+
+        body {
+            background: radial-gradient(ellipse at top, #0a1428 0%, #010a13 65%) fixed;
+        }
+
+        .font-lol {
+            font-family: 'Cinzel', serif;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        .lol-header {
+            background: linear-gradient(#091428, #010a13);
+            border-bottom: 2px solid var(--lol-gold-dark);
+        }
+
+        .lol-title {
+            color: var(--lol-gold);
+            text-shadow: 0 0 14px rgba(200, 170, 110, .4);
+        }
+
+        .card-lol {
+            background: #091428;
+            border: 1px solid var(--lol-gold-dark);
+            border-radius: 0;
+        }
+
+        .btn-lol {
+            --bs-btn-color: #c8aa6e;
+            --bs-btn-border-color: #c8aa6e;
+            --bs-btn-border-radius: 0;
+            --bs-btn-hover-color: #010a13;
+            --bs-btn-hover-bg: #c8aa6e;
+            --bs-btn-hover-border-color: #f0e6d2;
+            --bs-btn-active-color: #010a13;
+            --bs-btn-active-bg: #f0e6d2;
+            --bs-btn-active-border-color: #f0e6d2;
+            --bs-btn-disabled-color: #785a28;
+            --bs-btn-disabled-border-color: #785a28;
+            font-family: 'Cinzel', serif;
+            letter-spacing: .1em;
+            text-transform: uppercase;
+        }
+
+        .btn-team-blue {
+            background: var(--team-blue);
+            border-color: var(--team-blue);
+            color: #fff;
+        }
+
+        .btn-team-red {
+            background: var(--team-red);
+            border-color: var(--team-red);
+            color: #fff;
+        }
+
+        .badge-lol {
+            background: transparent;
+            border: 1px solid var(--lol-gold-dark);
+            color: var(--lol-hex);
+            border-radius: 0;
+            letter-spacing: .08em;
+        }
+
+        .badge-have {
+            background: var(--lol-gold);
+            color: #010a13;
+            border-radius: 0;
+            letter-spacing: .08em;
+        }
+
+        .badge-miss {
+            background: transparent;
+            border: 1px dashed var(--lol-gold-dark);
+            color: #5b5a56;
+            border-radius: 0;
+            letter-spacing: .08em;
+        }
+
+        .progress {
+            background: #1e2328;
+            border-radius: 0;
+            height: .6rem;
+        }
+
+        .progress-bar {
+            background: linear-gradient(90deg, #785a28, #c8aa6e);
+            transition: width 1.2s ease;
+        }
+
+        .progress-bar.bar-hex {
+            background: linear-gradient(90deg, #0397ab, #0ac8b9);
+        }
+
+        .progress-bar.bar-blue {
+            background: linear-gradient(90deg, #0a3d8f, var(--team-blue));
+        }
+
+        .progress-bar.bar-red {
+            background: linear-gradient(90deg, #8f1d2b, var(--team-red));
+        }
+
+        .text-blue {
+            color: var(--team-blue);
+        }
+
+        .text-red {
+            color: var(--team-red);
+        }
+
+        .team-card-blue {
+            border-top: 3px solid var(--team-blue);
+        }
+
+        .team-card-red {
+            border-top: 3px solid var(--team-red);
+        }
+
+        .vs-badge {
+            width: 64px;
+            height: 64px;
+            border: 2px solid var(--lol-gold);
+            transform: rotate(45deg);
+            background: #010a13;
+        }
+
+        .vs-badge>span {
+            transform: rotate(-45deg);
+        }
+    </style>
+</head>
+
+<body>
+    <header class="container-fluid lol-header shadow">
+        <div class="py-3 text-center">
+            <a href="index.html" class="text-decoration-none">
+                <div class="display-6 fw-bold font-lol lol-title" id="name">Champion</div>
+            </a>
+            <div class="small font-lol d-none" style="color: var(--lol-hex)" id="subtitle"></div>
+        </div>
+    </header>
+
+    <div class="container-xl py-4">
+        <div class="d-flex flex-wrap justify-content-between gap-2 mb-3">
+            <a href="page.html" id="backlink" class="btn btn-lol btn-sm">&larr; Back to list</a>
+            <div class="d-flex gap-2 d-none" id="matchupActions">
+                <button type="button" class="btn btn-lol btn-sm" id="swapBtn">Swap sides</button>
+                <button type="button" class="btn btn-outline-secondary btn-sm rounded-0" id="clearBtn">Clear
+                    teams</button>
+            </div>
+        </div>
+
+        <!-- ===== Champion mode: view.html?id=Ahri ===== -->
+        <div id="championView" class="d-none">
+            <div class="card-lol position-relative overflow-hidden mb-3">
+                <img id="image" src="" class="w-100 d-block" alt="">
+                <div class="position-absolute bottom-0 start-0 end-0 px-4 pb-3 pt-5"
+                    style="background: linear-gradient(transparent, #010a13);">
+                    <div class="h2 fst-italic font-lol lol-title mb-0" id="title">
+                        <div class="spinner-border text-warning" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <div class="mt-2" id="tags"></div>
+                </div>
+            </div>
+
+            <div class="card-lol p-4">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 border-bottom pb-2 mb-3">
+                    <h2 class="h6 font-lol lol-title m-0">Biography</h2>
+                    <div class="d-flex flex-wrap gap-2">
+                        <button type="button" class="btn btn-lol btn-sm" id="addBlue">+ Blue team</button>
+                        <button type="button" class="btn btn-lol btn-sm" id="addRed">+ Red team</button>
+                        <a href="view.html" class="btn btn-lol btn-sm" id="teamLink">Team Matchup</a>
+                    </div>
+                </div>
+                <p id="blurb"></p>
+                <h2 class="h6 font-lol lol-title border-bottom pb-2 mt-4">Ratings</h2>
+                <div class="row g-4" id="info"></div>
+            </div>
+        </div>
+
+        <!-- ===== Matchup mode: view.html (no id) ===== -->
+        <div id="matchupView" class="d-none">
+            <!-- Prediction -->
+            <div class="card-lol p-4 mb-4 d-none" id="predictionCard">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="h5 font-lol text-blue m-0">Blue Team</div>
+                    <div class="vs-badge d-flex align-items-center justify-content-center"><span
+                            class="font-lol lol-title">VS</span></div>
+                    <div class="h5 font-lol text-red m-0">Red Team</div>
+                </div>
+                <div class="progress" style="height: 2rem" role="progressbar" aria-label="Win chance">
+                    <div class="progress-bar bar-blue fs-6 fw-bold" id="barBlue" style="width: 50%"></div>
+                    <div class="progress-bar bar-red fs-6 fw-bold" id="barRed" style="width: 50%"></div>
+                </div>
+                <div class="text-center mt-4">
+                    <div class="small font-lol" style="color: var(--lol-hex)">Predicted winner</div>
+                    <div class="display-6 fw-bold font-lol" id="verdict"></div>
+                    <span class="badge badge-lol font-lol" id="confidence"></span>
+                </div>
+                <ul class="small mt-4 mb-2" id="takeaways"></ul>
+                <div class="small fst-italic">A fun estimate from champion ratings and base stats in Data Dragon. It is
+                    not based on real match data.</div>
+            </div>
+
+            <!-- Notice when a team is empty -->
+            <div class="card-lol p-4 text-center mb-4 d-none" id="notice">
+                <div class="h5 font-lol lol-title">Pick champions for both teams</div>
+                <p class="mb-3">Add at least one champion to the Blue team and one to the Red team to get a prediction.
+                </p>
+                <a href="page.html" class="btn btn-lol">Build teams</a>
+            </div>
+
+            <!-- The two teams -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <div class="card-lol team-card-blue p-3 h-100" id="blueCol"></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card-lol team-card-red p-3 h-100" id="redCol"></div>
+                </div>
+            </div>
+
+            <!-- Head to head -->
+            <div class="card-lol p-4 d-none" id="compareCard">
+                <h2 class="h6 font-lol lol-title border-bottom pb-2">Head to head ratings (average)</h2>
+                <div class="mb-4" id="ratings"></div>
+                <h2 class="h6 font-lol lol-title border-bottom pb-2">What decides the match</h2>
+                <div id="factors"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+        crossorigin="anonymous"></script>
+    <script>
+        const VERSION = '16.22.1';
+        const API_URL = 'https://ddragon.leagueoflegends.com/cdn/' + VERSION + '/data/en_US/champion.json';
+        const SPLASH_URL = 'https://ddragon.leagueoflegends.com/cdn/img/champion/splash/';
+        const ICON_URL = 'https://ddragon.leagueoflegends.com/cdn/' + VERSION + '/img/champion/';
+        const TEAMS_KEY = 'lolTeams';
+        const MAX = 5;
+        const SIDES = ['blue', 'red'];
+
+        const roles = ['Fighter', 'Tank', 'Mage', 'Assassin', 'Marksman', 'Support'];
+        const infoBar = {
+            attack: ['Attack', ''],
+            defense: ['Defense', ''],
+            magic: ['Magic', 'bar-hex'],
+            difficulty: ['Difficulty', ''],
+        };
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        var role = urlParams.get('role');
+
+        var byId = {};
+        var teams = loadTeams();
+
+        var elName = document.getElementById("name");
+        var elTitle = document.getElementById("title");
+        var elImage = document.getElementById("image");
+        var elTags = document.getElementById("tags");
+        var elBlurb = document.getElementById("blurb");
+        var elInfo = document.getElementById("info");
+        var elBacklink = document.getElementById("backlink");
+        var elSubtitle = document.getElementById("subtitle");
+
+        // ---- Teams (same storage as page.html) ----
+        function cleanList(list, seen) {
+            return (Array.isArray(list) ? list : []).filter(function (x) {
+                if (seen.has(x)) return false;
+                seen.add(x);
+                return true;
+            }).slice(0, MAX);
+        }
+        function loadTeams() {
+            try {
+                var t = JSON.parse(localStorage.getItem(TEAMS_KEY)) || {};
+                var seen = new Set();
+                return { blue: cleanList(t.blue, seen), red: cleanList(t.red, seen) };
+            } catch (e) { return { blue: [], red: [] }; }
+        }
+        function saveTeams() {
+            try { localStorage.setItem(TEAMS_KEY, JSON.stringify(teams)); } catch (e) { }
+        }
+        function teamOf(cid) {
+            return teams.blue.includes(cid) ? 'blue' : teams.red.includes(cid) ? 'red' : null;
+        }
+        function label(side) { return side === 'blue' ? 'Blue' : 'Red'; }
+        function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+
+        function statBars(valueOf, decimals) {
+            return Object.keys(infoBar).map(function (key) {
+                var value = valueOf(key);
+                return `
+          <div class="col-6 col-md-3">
+            <div class="small font-lol mb-1" style="color: var(--lol-gold-light)">` + infoBar[key][0] + ` <span class="float-end">` + value.toFixed(decimals) + `/10</span></div>
+            <div class="progress" role="progressbar" aria-valuenow="` + value + `" aria-valuemin="0" aria-valuemax="10">
+              <div class="progress-bar ` + infoBar[key][1] + `" style="width: ` + (value * 10) + `%"></div>
+            </div>
+          </div>`;
+            }).join('');
+        }
+
+        // ================= Champion mode =================
+        function showChampionView(champ) {
+            document.getElementById('championView').classList.remove('d-none');
+            elBacklink.href = "page.html" + (role ? "?role=" + role : "");
+
+            document.title = champ.name + ' · League Champions';
+            elName.textContent = champ.name;
+            elTitle.textContent = champ.title;
+            elBlurb.textContent = champ.blurb;
+            elImage.src = SPLASH_URL + champ.id + '_0.jpg';
+            elImage.alt = champ.name;
+
+            elTags.innerHTML = champ.tags.map(function (tag) {
+                return '<span class="badge badge-lol font-lol me-1">' + tag + '</span>';
+            }).join('');
+
+            elInfo.innerHTML = statBars(key => champ.info[key], 0);
+
+            var buttons = { blue: document.getElementById('addBlue'), red: document.getElementById('addRed') };
+            var link = document.getElementById('teamLink');
+
+            function refresh() {
+                var cur = teamOf(champ.id);
+                SIDES.forEach(function (side) {
+                    var btn = buttons[side];
+                    var full = teams[side].length >= MAX;
+                    if (cur === side) {
+                        btn.className = 'btn btn-sm rounded-0 font-lol btn-team-' + side;
+                        btn.textContent = '\u2713 ' + label(side) + ' (remove)';
+                        btn.disabled = false;
+                    } else if (cur) {
+                        btn.className = 'btn btn-outline-secondary btn-sm rounded-0 font-lol';
+                        btn.textContent = 'Move to ' + label(side);
+                        btn.disabled = full;
+                    } else {
+                        btn.className = 'btn btn-lol btn-sm';
+                        btn.textContent = full ? label(side) + ' team full' : '+ ' + label(side) + ' team';
+                        btn.disabled = full;
+                    }
+                });
+                link.textContent = 'Team Matchup (' + teams.blue.length + ' vs ' + teams.red.length + ')';
+            }
+
+            SIDES.forEach(function (side) {
+                buttons[side].onclick = function () {
+                    var cur = teamOf(champ.id);
+                    if (cur === side) {
+                        teams[side] = teams[side].filter(x => x !== champ.id);
+                    } else if (teams[side].length < MAX) {
+                        if (cur) teams[cur] = teams[cur].filter(x => x !== champ.id);
+                        teams[side].push(champ.id);
+                    }
+                    saveTeams();
+                    refresh();
+                };
+            });
+            refresh();
+        }
+
+        // ================= Matchup mode =================
+
+        // Turn a team into numbers (each factor is 0 to 1)
+        function teamStats(ids) {
+            var m = ids.map(x => byId[x]).filter(Boolean);
+            var n = m.length;
+            if (!n) return null;
+
+            var avg = function (k) { return m.reduce((s, c) => s + c.info[k], 0) / n; };
+            var avgStat = function (k) { return m.reduce((s, c) => s + c.stats[k], 0) / n; };
+
+            var attack = avg('attack'), defense = avg('defense'), magic = avg('magic'), difficulty = avg('difficulty');
+            var tags = new Set();
+            m.forEach(c => c.tags.forEach(t => tags.add(t)));
+
+            // Damage: each champion's best damage rating
+            var damage = m.reduce((s, c) => s + Math.max(c.info.attack, c.info.magic), 0) / n / 10;
+
+            // Durability: defense rating plus base health and armor
+            var hpN = clamp((avgStat('hp') - 450) / 250, 0, 1);
+            var armorN = clamp((avgStat('armor') - 20) / 30, 0, 1);
+            var durability = (defense / 10) * 0.6 + hpN * 0.25 + armorN * 0.15;
+
+            // Composition: frontline + carry + support, and a mix of physical and magic damage
+            var frontline = tags.has('Tank') || tags.has('Fighter');
+            var carry = tags.has('Marksman') || tags.has('Mage') || tags.has('Assassin');
+            var support = tags.has('Support');
+            var mix = (attack + magic) > 0 ? 1 - Math.abs(attack - magic) / (attack + magic) : 0;
+            var composition = ((frontline ? 1 : 0) + (carry ? 1 : 0) + (support ? 1 : 0)) / 3 * 0.6 + mix * 0.4;
+
+            // Ease of play: easier champions are less likely to be misplayed
+            var ease = 1 - difficulty / 10;
+
+            var composite = 0.35 * damage + 0.25 * durability + 0.25 * composition + 0.15 * ease;
+            var strength = composite * (0.4 + 0.6 * n / 5);    // a smaller team is weaker
+
+            return {
+                members: m, n: n, tags: tags,
+                attack: attack, defense: defense, magic: magic, difficulty: difficulty,
+                damage: damage, durability: durability, composition: composition, ease: ease,
+                frontline: frontline, carry: carry, support: support, mix: mix,
+                strength: strength
+            };
+        }
+
+        const factorList = [
+            ['Damage', 'damage'],
+            ['Durability', 'durability'],
+            ['Composition', 'composition'],
+            ['Ease of play', 'ease'],
+        ];
+
+        function dualBar(name, a, b, max, decimals) {
+            var aw = clamp(a / max * 100, 0, 100), bw = clamp(b / max * 100, 0, 100);
+            var aBold = a > b ? 'fw-bold' : '', bBold = b > a ? 'fw-bold' : '';
+            return `
+        <div class="mb-3">
+          <div class="d-flex justify-content-between small font-lol mb-1">
+            <span class="text-blue ` + aBold + `">` + a.toFixed(decimals) + `</span>
+            <span style="color: var(--lol-gold-light)">` + name + `</span>
+            <span class="text-red ` + bBold + `">` + b.toFixed(decimals) + `</span>
+          </div>
+          <div class="row g-1">
+            <div class="col-6"><div class="progress justify-content-end"><div class="progress-bar bar-blue" style="width: ` + aw + `%"></div></div></div>
+            <div class="col-6"><div class="progress"><div class="progress-bar bar-red" style="width: ` + bw + `%"></div></div></div>
+          </div>
+        </div>`;
+        }
+
+        function teamColumn(side) {
+            var ids = teams[side];
+            var s = teamStats(ids);
+            var html = '<div class="d-flex justify-content-between align-items-baseline mb-2">' +
+                '<div class="h5 font-lol text-' + side + ' m-0">' + label(side) + ' Team</div>' +
+                '<div class="small font-lol">' + ids.length + '/' + MAX + '</div></div>';
+
+            if (!s) {
+                return html + '<div class="text-center py-4">No champions yet. <a href="page.html">Pick some</a>.</div>';
+            }
+
+            html += s.members.map(function (c) {
+                return `
+          <div class="d-flex align-items-center gap-2 py-2 border-bottom">
+            <img src="` + ICON_URL + c.image.full + `" width="48" height="48" class="border" alt="` + c.name + `">
+            <div class="flex-grow-1 min-w-0">
+              <a href="view.html?id=` + c.id + `&role=` + c.tags[0] + `" class="fw-bold font-lol small text-decoration-none">` + c.name + `</a>
+              <div class="small text-truncate">` + c.title + `</div>
+              <div>` + c.tags.map(t => '<span class="badge badge-lol font-lol me-1">' + t + '</span>').join('') + `</div>
+            </div>
+            <button type="button" class="btn btn-outline-secondary btn-sm rounded-0" data-remove="` + c.id + `" data-side="` + side + `" title="Remove">&times;</button>
+          </div>`;
+            }).join('');
+
+            html += '<div class="mt-3">' + roles.map(function (r) {
+                return '<span class="badge ' + (s.tags.has(r) ? 'badge-have' : 'badge-miss') + ' font-lol me-1">' + r + '</span>';
+            }).join('') + '</div>';
+            return html;
+        }
+
+        function renderMatchup() {
+            var any = teams.blue.length + teams.red.length > 0;
+            elSubtitle.classList.remove('d-none');
+            elSubtitle.textContent = 'Blue ' + teams.blue.length + ' vs Red ' + teams.red.length;
+            document.getElementById('matchupActions').classList.toggle('d-none', !any);
+
+            document.getElementById('blueCol').innerHTML = teamColumn('blue');
+            document.getElementById('redCol').innerHTML = teamColumn('red');
+
+            var b = teamStats(teams.blue), r = teamStats(teams.red);
+            var ready = !!(b && r);
+            document.getElementById('predictionCard').classList.toggle('d-none', !ready);
+            document.getElementById('compareCard').classList.toggle('d-none', !ready);
+            document.getElementById('notice').classList.toggle('d-none', ready);
+            if (!ready) return;
+
+            // ---- Prediction ----
+            var p = 1 / (1 + Math.exp(-7 * (b.strength - r.strength)));
+            var bluePct = Math.round(clamp(p, 0.05, 0.95) * 100);
+            var redPct = 100 - bluePct;
+
+            var winner = bluePct >= redPct ? 'blue' : 'red';
+            var loser = winner === 'blue' ? 'red' : 'blue';
+            var winPct = Math.max(bluePct, redPct);
+            var edge = winPct - 50;
+            var conf = edge < 4 ? 'Toss-up' : edge < 12 ? 'Slight edge' : edge < 25 ? 'Clear favorite' : 'Heavy favorite';
+
+            var elBarBlue = document.getElementById('barBlue');
+            var elBarRed = document.getElementById('barRed');
+            elBarBlue.style.width = '50%';
+            elBarRed.style.width = '50%';
+            elBarBlue.textContent = bluePct + '%';
+            elBarRed.textContent = redPct + '%';
+            setTimeout(function () {
+                elBarBlue.style.width = bluePct + '%';
+                elBarRed.style.width = redPct + '%';
+            }, 80);
+
+            var elVerdict = document.getElementById('verdict');
+            elVerdict.textContent = edge < 4 ? 'Too close to call' : label(winner) + ' Team';
+            elVerdict.className = 'display-6 fw-bold font-lol ' + (edge < 4 ? 'lol-title' : 'text-' + winner);
+            document.getElementById('confidence').textContent = conf + ' \u00b7 ' + winPct + '% win chance';
+
+            // ---- Factor comparison and takeaways ----
+            var teamsBR = { blue: b, red: r };
+            var diffs = factorList.map(function (f) {
+                return { name: f[0], key: f[1], d: Math.round(b[f[1]] * 100) - Math.round(r[f[1]] * 100) };
+            });
+
+            var notes = [];
+            var wins = diffs.filter(x => winner === 'blue' ? x.d > 0 : x.d < 0)
+                .sort((x, y) => Math.abs(y.d) - Math.abs(x.d));
+            var losses = diffs.filter(x => winner === 'blue' ? x.d < 0 : x.d > 0)
+                .sort((x, y) => Math.abs(y.d) - Math.abs(x.d));
+            if (edge >= 4 && wins.length) {
+                notes.push(label(winner) + ' wins on ' + wins[0].name.toLowerCase() + ' (+' + Math.abs(wins[0].d) + ').');
+            }
+            if (losses.length) {
+                notes.push(label(loser) + ' has the edge in ' + losses[0].name.toLowerCase() + ' (+' + Math.abs(losses[0].d) + ').');
+            }
+            if (b.n !== r.n) {
+                var bigger = b.n > r.n ? 'blue' : 'red';
+                notes.push(label(bigger) + ' has more champions (' + teamsBR[bigger].n + ' vs ' + teamsBR[bigger === 'blue' ? 'red' : 'blue'].n + ').');
+            }
+            SIDES.forEach(function (side) {
+                var t = teamsBR[side];
+                if (t.n >= 2 && !t.frontline) notes.push(label(side) + ' has no frontline (Tank or Fighter).');
+                if (t.n >= 2 && !t.carry) notes.push(label(side) + ' has no main damage dealer (Marksman, Mage or Assassin).');
+                if (t.n >= 3 && t.mix < 0.5) notes.push(label(side) + ' deals mostly one damage type, so it is easier to counter.');
+            });
+            document.getElementById('takeaways').innerHTML = notes.map(n => '<li>' + n + '</li>').join('');
+
+            // ---- Head to head bars ----
+            document.getElementById('ratings').innerHTML =
+                dualBar('Attack', b.attack, r.attack, 10, 1) +
+                dualBar('Defense', b.defense, r.defense, 10, 1) +
+                dualBar('Magic', b.magic, r.magic, 10, 1) +
+                dualBar('Difficulty', b.difficulty, r.difficulty, 10, 1);
+
+            document.getElementById('factors').innerHTML = factorList.map(function (f) {
+                return dualBar(f[0], Math.round(b[f[1]] * 100), Math.round(r[f[1]] * 100), 100, 0);
+            }).join('');
+        }
+
+        function startMatchupMode() {
+            document.getElementById('matchupView').classList.remove('d-none');
+            elBacklink.href = 'page.html';
+            elBacklink.innerHTML = '&larr; Edit teams';
+            document.title = 'Team Matchup · League Champions';
+            elName.textContent = 'Team Matchup';
+            renderMatchup();
+        }
+
+        // Remove buttons inside the two team columns
+        document.getElementById('matchupView').addEventListener('click', function (e) {
+            var btn = e.target.closest('[data-remove]');
+            if (!btn) return;
+            var side = btn.dataset.side;
+            teams[side] = teams[side].filter(x => x !== btn.dataset.remove);
+            saveTeams();
+            renderMatchup();
+        });
+
+        document.getElementById('swapBtn').addEventListener('click', function () {
+            teams = { blue: teams.red, red: teams.blue };
+            saveTeams();
+            renderMatchup();
+        });
+
+        document.getElementById('clearBtn').addEventListener('click', function () {
+            teams = { blue: [], red: [] };
+            saveTeams();
+            renderMatchup();
+        });
+
+        // ================= Start =================
+        (async function init() {
+            if (id == null) {
+                document.getElementById('matchupView').classList.remove('d-none');
+            } else {
+                document.getElementById('championView').classList.remove('d-none');
+            }
+
+            try {
+                const response = await fetch(API_URL);
+                const json = await response.json();
+                byId = json.data;
+                teams.blue = teams.blue.filter(x => byId[x]);
+                teams.red = teams.red.filter(x => byId[x]);
+
+                document.getElementById('championView').classList.add('d-none');
+                document.getElementById('matchupView').classList.add('d-none');
+
+                if (id == null) {
+                    startMatchupMode();
+                } else if (byId[id]) {
+                    showChampionView(byId[id]);
+                } else {
+                    document.getElementById('championView').classList.remove('d-none');
+                    elName.textContent = 'Champion not found';
+                }
+            } catch (err) {
+                elName.textContent = 'Failed to load data';
+                console.error(err);
+            }
+        })();
+    </script>
+</body>
+
+</html>

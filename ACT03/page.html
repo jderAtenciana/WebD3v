@@ -1,0 +1,522 @@
+<!doctype html>
+<html lang="en" data-bs-theme="dark">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LEAGUE CHAMPIONS</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    /* League of Legends theme: Bootstrap variable overrides + a few helpers */
+    :root,
+    [data-bs-theme=dark] {
+      --lol-gold: #c8aa6e;
+      --lol-gold-dark: #785a28;
+      --lol-gold-light: #f0e6d2;
+      --lol-hex: #0ac8b9;
+      --team-blue: #2f8bff;
+      --team-red: #e84057;
+      --bs-body-bg: #010a13;
+      --bs-body-color: #a09b8c;
+      --bs-heading-color: #f0e6d2;
+      --bs-border-color: #463714;
+      --bs-link-color: #c8aa6e;
+      --bs-link-hover-color: #f0e6d2;
+      --bs-secondary-color: #a09b8c;
+    }
+
+    body {
+      background: radial-gradient(ellipse at top, #0a1428 0%, #010a13 65%) fixed;
+    }
+
+    .font-lol {
+      font-family: 'Cinzel', serif;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .lol-header {
+      background: linear-gradient(#091428, #010a13);
+      border-bottom: 2px solid var(--lol-gold-dark);
+    }
+
+    .lol-title {
+      color: var(--lol-gold);
+      text-shadow: 0 0 14px rgba(200, 170, 110, .4);
+    }
+
+    .card-lol {
+      background: #091428;
+      border: 1px solid var(--lol-gold-dark);
+      border-radius: 0;
+      transition: all .2s;
+    }
+
+    .card-lol:hover {
+      border-color: var(--lol-gold);
+      box-shadow: 0 0 18px rgba(10, 200, 185, .35);
+      transform: translateY(-4px);
+    }
+
+    .card-lol.selected-blue {
+      border-color: var(--team-blue);
+      box-shadow: 0 0 20px rgba(47, 139, 255, .65);
+    }
+
+    .card-lol.selected-red {
+      border-color: var(--team-red);
+      box-shadow: 0 0 20px rgba(232, 64, 87, .65);
+    }
+
+    .pagination {
+      --bs-pagination-bg: #091428;
+      --bs-pagination-color: #c8aa6e;
+      --bs-pagination-border-color: #785a28;
+      --bs-pagination-hover-bg: #1e2328;
+      --bs-pagination-hover-color: #f0e6d2;
+      --bs-pagination-hover-border-color: #c8aa6e;
+      --bs-pagination-focus-bg: #1e2328;
+      --bs-pagination-focus-color: #f0e6d2;
+      --bs-pagination-focus-box-shadow: none;
+      --bs-pagination-active-bg: #c8aa6e;
+      --bs-pagination-active-color: #010a13;
+      --bs-pagination-active-border-color: #c8aa6e;
+      --bs-pagination-border-radius: 0;
+      --bs-pagination-padding-x: .85rem;
+    }
+
+    .pagination .page-link {
+      font-family: 'Cinzel', serif;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-size: .85rem;
+    }
+
+    .badge-lol {
+      background: transparent;
+      border: 1px solid var(--lol-gold-dark);
+      color: var(--lol-hex);
+      border-radius: 0;
+      letter-spacing: .08em;
+    }
+
+    .btn-lol {
+      --bs-btn-color: #c8aa6e;
+      --bs-btn-border-color: #c8aa6e;
+      --bs-btn-border-radius: 0;
+      --bs-btn-hover-color: #010a13;
+      --bs-btn-hover-bg: #c8aa6e;
+      --bs-btn-hover-border-color: #f0e6d2;
+      --bs-btn-active-color: #010a13;
+      --bs-btn-active-bg: #f0e6d2;
+      --bs-btn-active-border-color: #f0e6d2;
+      --bs-btn-disabled-color: #785a28;
+      --bs-btn-disabled-border-color: #785a28;
+      font-family: 'Cinzel', serif;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .btn-team-blue {
+      background: var(--team-blue);
+      border-color: var(--team-blue);
+      color: #fff;
+    }
+
+    .btn-team-red {
+      background: var(--team-red);
+      border-color: var(--team-red);
+      color: #fff;
+    }
+
+    .form-control-lol {
+      background: #010a13;
+      border: 1px solid var(--lol-gold-dark);
+      border-radius: 0;
+      color: var(--lol-gold-light);
+    }
+
+    .form-control-lol:focus {
+      background: #010a13;
+      color: var(--lol-gold-light);
+      border-color: var(--lol-hex);
+      box-shadow: 0 0 10px rgba(10, 200, 185, .4);
+    }
+
+    /* Two team panels in the sticky bar */
+    .team-panel {
+      background: #010a13;
+      border: 1px solid #463714;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .team-panel.blue .team-name {
+      color: var(--team-blue);
+    }
+
+    .team-panel.red .team-name {
+      color: var(--team-red);
+    }
+
+    .team-panel.blue.active {
+      border-color: var(--team-blue);
+      box-shadow: 0 0 14px rgba(47, 139, 255, .5);
+    }
+
+    .team-panel.red.active {
+      border-color: var(--team-red);
+      box-shadow: 0 0 14px rgba(232, 64, 87, .5);
+    }
+
+    .slot {
+      width: 40px;
+      height: 40px;
+      background: #091428;
+      border: 1px dashed var(--lol-gold-dark);
+      color: var(--lol-gold-dark);
+    }
+
+    .slot.filled {
+      border: 1px solid var(--lol-gold);
+      cursor: pointer;
+    }
+
+    .slot.filled:hover {
+      box-shadow: 0 0 10px rgba(220, 53, 69, .8);
+      border-color: #dc3545;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="container-fluid lol-header shadow">
+    <div class="py-4 text-center">
+      <a href="index.html" class="text-decoration-none">
+        <h1 class="display-5 fw-bold font-lol lol-title m-0">LEAGUE OF LEGENDS</h1>
+      </a>
+      <div class="small font-lol" id="subtitle" style="color: var(--lol-hex)">Loading champions...</div>
+    </div>
+  </header>
+
+  <!-- Sticky bar: role pagination, search and the two teams -->
+  <nav class="sticky-lg-top py-2 border-bottom shadow" style="background: #010a13" aria-label="Role pagination">
+    <div class="container-fluid px-3 px-md-4">
+      <div class="row align-items-center g-2">
+        <div class="col-auto">
+          <a href="index.html" class="btn btn-lol btn-sm">&larr; Back</a>
+        </div>
+        <div class="col-12 col-lg order-3 order-lg-2 d-flex justify-content-lg-center overflow-x-auto">
+          <ul class="pagination m-0 flex-nowrap text-nowrap" id="rolePagination"></ul>
+        </div>
+        <div class="col col-lg-2 order-2 order-lg-3">
+          <input type="search" class="form-control form-control-lol form-control-sm" id="searchInput"
+            placeholder="Search champions..." autocomplete="off">
+        </div>
+      </div>
+
+      <!-- Team bar: click a panel to choose which team you are adding to -->
+      <div class="row align-items-stretch g-2 mt-1 pt-2 border-top">
+        <div class="col-12 col-lg">
+          <div class="team-panel blue p-2" data-panel="blue">
+            <div class="d-flex justify-content-between small font-lol mb-1">
+              <span class="team-name" id="name-blue">Blue Team</span>
+              <span id="count-blue">0/5</span>
+            </div>
+            <div class="d-flex gap-2" id="slots-blue"></div>
+          </div>
+        </div>
+        <div class="col-auto d-none d-lg-flex align-items-center font-lol lol-title">VS</div>
+        <div class="col-12 col-lg">
+          <div class="team-panel red p-2" data-panel="red">
+            <div class="d-flex justify-content-between small font-lol mb-1">
+              <span class="team-name" id="name-red">Red Team</span>
+              <span id="count-red">0/5</span>
+            </div>
+            <div class="d-flex gap-2" id="slots-red"></div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-auto d-flex flex-lg-column justify-content-center gap-2">
+          <a href="view.html" class="btn btn-lol btn-sm disabled" id="compareBtn">Compare Teams</a>
+          <button type="button" class="btn btn-outline-secondary btn-sm rounded-0" id="randomBtn">Randomize</button>
+          <button type="button" class="btn btn-outline-secondary btn-sm rounded-0" id="clearBtn">Clear</button>
+        </div>
+      </div>
+      <div class="small text-warning text-center" style="min-height: 1.2em" id="teamMsg"></div>
+    </div>
+  </nav>
+
+  <main class="container-fluid px-3 px-md-5 py-4">
+    <div class="d-flex align-items-baseline justify-content-between border-bottom pb-2 mb-4">
+      <h2 class="h3 font-lol lol-title m-0" id="roleHeading"></h2>
+      <span class="badge badge-lol" id="roleCount"></span>
+    </div>
+    <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-6 g-3" id="parent">
+      <div class="col-12 text-center my-5">
+        <div class="spinner-border text-warning" role="status"><span class="visually-hidden">Loading...</span></div>
+      </div>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+    crossorigin="anonymous"></script>
+  <script>
+    const VERSION = '16.22.1';
+    const API_URL = 'https://ddragon.leagueoflegends.com/cdn/' + VERSION + '/data/en_US/champion.json';
+    const LOADING_URL = 'https://ddragon.leagueoflegends.com/cdn/img/champion/loading/';
+    const ICON_URL = 'https://ddragon.leagueoflegends.com/cdn/' + VERSION + '/img/champion/';
+    const TEAMS_KEY = 'lolTeams';
+    const MAX = 5;
+    const SIDES = ['blue', 'red'];
+
+    const roles = ['Fighter', 'Tank', 'Mage', 'Assassin', 'Marksman', 'Support'];
+
+    const urlParams = new URLSearchParams(window.location.search);
+    var role = urlParams.get('role');
+    if (!roles.includes(role)) role = roles[0];
+
+    var champions = [];
+    var byId = {};
+    var query = '';
+    var active = 'blue';        // which team new picks go to
+    var teams = loadTeams();
+    var msgTimer = null;
+
+    // ---- Teams are saved in the browser and read by view.html ----
+    function cleanList(list, seen) {
+      return (Array.isArray(list) ? list : []).filter(function (x) {
+        if (seen.has(x)) return false;
+        seen.add(x);
+        return true;
+      }).slice(0, MAX);
+    }
+    function loadTeams() {
+      try {
+        var t = JSON.parse(localStorage.getItem(TEAMS_KEY)) || {};
+        var seen = new Set();
+        return { blue: cleanList(t.blue, seen), red: cleanList(t.red, seen) };
+      } catch (e) { return { blue: [], red: [] }; }
+    }
+    function saveTeams() {
+      try { localStorage.setItem(TEAMS_KEY, JSON.stringify(teams)); } catch (e) { }
+    }
+
+    function teamOf(id) {
+      return teams.blue.includes(id) ? 'blue' : teams.red.includes(id) ? 'red' : null;
+    }
+    function label(side) { return side === 'blue' ? 'Blue' : 'Red'; }
+
+    function normalize(str) {
+      return String(str).toLowerCase().replace(/[^a-z0-9]/g, '');
+    }
+
+    var elSearch = document.getElementById("searchInput");
+    var elParent = document.getElementById("parent");
+    var elPagination = document.getElementById("rolePagination");
+    var elHeading = document.getElementById("roleHeading");
+    var elCount = document.getElementById("roleCount");
+    var elSubtitle = document.getElementById("subtitle");
+    var elCompare = document.getElementById("compareBtn");
+    var elMsg = document.getElementById("teamMsg");
+
+    const teamBtnBase = 'btn btn-sm rounded-0 position-absolute top-0 end-0 m-2 z-2 font-lol ';
+
+    function flash(text) {
+      elMsg.textContent = text;
+      clearTimeout(msgTimer);
+      msgTimer = setTimeout(function () { elMsg.textContent = ''; }, 2500);
+    }
+
+    // ---- Team bar ----
+    function renderTeams() {
+      SIDES.forEach(function (side) {
+        var html = '';
+        for (var i = 0; i < MAX; i++) {
+          var champ = byId[teams[side][i]];
+          if (champ) {
+            html += '<div class="slot filled" data-remove="' + champ.id + '" title="Remove ' + champ.name +
+              '"><img src="' + ICON_URL + champ.image.full + '" class="w-100 h-100 object-fit-cover" alt="' + champ.name + '"></div>';
+          } else {
+            html += '<div class="slot d-flex align-items-center justify-content-center">+</div>';
+          }
+        }
+        document.getElementById('slots-' + side).innerHTML = html;
+        document.getElementById('count-' + side).textContent = teams[side].length + '/' + MAX;
+        document.getElementById('name-' + side).textContent = label(side) + ' Team' + (active === side ? ' \u00b7 adding' : '');
+        document.querySelector('[data-panel="' + side + '"]').classList.toggle('active', active === side);
+      });
+      elCompare.classList.toggle('disabled', !(teams.blue.length && teams.red.length));
+    }
+
+    function updateSelected() {
+      document.querySelectorAll('[data-id]').forEach(function (card) {
+        var tm = teamOf(card.dataset.id);
+        var btn = card.querySelector('[data-team]');
+        card.classList.toggle('selected-blue', tm === 'blue');
+        card.classList.toggle('selected-red', tm === 'red');
+        if (tm === null) {
+          btn.className = teamBtnBase + 'btn-lol';
+          btn.textContent = '+ ' + label(active);
+          btn.title = 'Add to ' + label(active) + ' team';
+        } else if (tm === active) {
+          btn.className = teamBtnBase + 'btn-team-' + active;
+          btn.textContent = '\u2713 ' + label(active);
+          btn.title = 'Remove from ' + label(active) + ' team';
+        } else {
+          btn.className = teamBtnBase + 'btn-outline-secondary';
+          btn.textContent = 'On ' + label(tm);
+          btn.title = 'Move to ' + label(active) + ' team';
+        }
+      });
+    }
+
+    function refreshAll() {
+      saveTeams();
+      renderTeams();
+      updateSelected();
+    }
+
+    function toggleTeam(id) {
+      var cur = teamOf(id);
+      if (cur === active) {
+        teams[active] = teams[active].filter(x => x !== id);
+      } else {
+        if (teams[active].length >= MAX) {
+          flash(label(active) + ' team is full. Remove a champion first.');
+          return;
+        }
+        if (cur) teams[cur] = teams[cur].filter(x => x !== id);   // moving from the other team
+        teams[active].push(id);
+      }
+      refreshAll();
+    }
+
+    function randomize() {
+      var pool = champions.map(c => c.id);
+      for (var i = pool.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+      }
+      teams.blue = pool.slice(0, MAX);
+      teams.red = pool.slice(MAX, MAX * 2);
+      refreshAll();
+    }
+
+    // ---- Role pagination ----
+    function renderPagination() {
+      elPagination.innerHTML = '';
+
+      var prevIndex = (roles.indexOf(role) - 1 + roles.length) % roles.length;
+      var nextIndex = (roles.indexOf(role) + 1) % roles.length;
+
+      function addItem(label, target, activeItem) {
+        var li = document.createElement('li');
+        li.className = 'page-item' + (activeItem ? ' active' : '');
+        li.innerHTML = '<a class="page-link" role="button">' + label + '</a>';
+        li.onclick = function () {
+          elSearch.value = '';
+          query = '';
+          getChampions(target);
+        };
+        elPagination.appendChild(li);
+      }
+
+      addItem('&laquo;', roles[prevIndex], false);
+      roles.forEach(function (r) {
+        var count = champions.filter(c => c.tags.includes(r)).length;
+        addItem(r + ' <small class="ms-1 opacity-75">(' + count + ')</small>', r, r === role && !query);
+      });
+      addItem('&raquo;', roles[nextIndex], false);
+    }
+
+    function cardHtml(champ) {
+      var r = query ? champ.tags[0] : role;
+      return `
+        <div class="col">
+          <div class="card card-lol h-100 overflow-hidden position-relative" data-id="` + champ.id + `">
+            <a href="view.html?id=` + champ.id + `&role=` + r + `" class="text-decoration-none">
+              <img src="` + LOADING_URL + champ.id + `_0.jpg" class="card-img rounded-0" loading="lazy" alt="` + champ.name + `">
+              <div class="card-img-overlay d-flex flex-column justify-content-end p-2"
+                style="background: linear-gradient(transparent 55%, rgba(1,10,19,.95));">
+                <div class="fw-bold font-lol small lh-sm" style="color: var(--lol-gold-light)">` + champ.name + `</div>
+                <div class="small text-truncate" style="color: var(--lol-gold)">` + champ.title + `</div>
+              </div>
+            </a>
+            <button type="button" class="` + teamBtnBase + `btn-lol" data-team="` + champ.id + `">+ Blue</button>
+          </div>
+        </div>`;
+    }
+
+    const getChampions = async (newRole) => {
+      if (newRole) {
+        role = newRole;
+        history.replaceState(null, '', '?role=' + role);
+      }
+
+      if (champions.length === 0) {
+        const response = await fetch(API_URL);
+        const json = await response.json();
+        champions = Object.values(json.data);
+        champions.forEach(function (c) { byId[c.id] = c; });
+        teams.blue = teams.blue.filter(id => byId[id]);
+        teams.red = teams.red.filter(id => byId[id]);
+        elSubtitle.textContent = champions.length + ' champions · patch ' + json.version;
+      }
+
+      renderPagination();
+      renderTeams();
+
+      var list = query
+        ? champions.filter(c => normalize(c.name).includes(query) || normalize(c.id).includes(query))
+        : champions.filter(c => c.tags.includes(role));
+      elHeading.textContent = query ? 'Search results' : role + 's';
+      elCount.textContent = list.length + ' champions';
+
+      elParent.innerHTML = list.length
+        ? list.map(cardHtml).join('')
+        : '<div class="col-12 text-center my-5">No champions found.</div>';
+      updateSelected();
+    }
+
+    // ---- Events ----
+    elParent.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-team]');
+      if (btn) toggleTeam(btn.dataset.team);
+    });
+
+    // Slots remove a champion; clicking anywhere else on a panel makes that team the active one
+    document.querySelectorAll('.team-panel').forEach(function (panel) {
+      panel.addEventListener('click', function (e) {
+        var slot = e.target.closest('[data-remove]');
+        if (slot) {
+          var side = panel.dataset.panel;
+          teams[side] = teams[side].filter(x => x !== slot.dataset.remove);
+          refreshAll();
+          return;
+        }
+        active = panel.dataset.panel;
+        renderTeams();
+        updateSelected();
+      });
+    });
+
+    document.getElementById('randomBtn').addEventListener('click', randomize);
+
+    document.getElementById('clearBtn').addEventListener('click', function () {
+      teams = { blue: [], red: [] };
+      refreshAll();
+    });
+
+    elSearch.addEventListener('input', function () {
+      query = normalize(elSearch.value);
+      getChampions();
+    });
+
+    getChampions();
+  </script>
+</body>
+
+</html>
